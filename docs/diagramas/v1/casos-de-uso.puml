@@ -1,0 +1,32 @@
+@startuml casos-de-uso-v1
+!pragma layout smetana
+caption AlugaCar - Diagrama de Casos de Uso (v1 - modelo inicial)
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Cliente" as Cliente
+actor "Agente" as Agente
+actor "Banco" as Banco
+Agente <|-- Banco
+
+rectangle "Sistema de Aluguel de Carros" {
+  usecase "Efetuar login" as UC02
+  usecase "Introduzir pedido" as UC04
+  usecase "Modificar pedido" as UC05
+  usecase "Consultar pedido" as UC06
+  usecase "Cancelar pedido" as UC07
+  usecase "Avaliar pedido" as UC08
+  usecase "Conceder crédito" as UC10
+}
+
+Cliente --> UC02
+Cliente --> UC04
+Cliente --> UC05
+Cliente --> UC06
+Cliente --> UC07
+UC02 <-- Agente
+UC05 <-- Agente
+UC08 <-- Agente
+UC10 <-- Banco
+@enduml

@@ -1,0 +1,18 @@
+# Segredos
+.env
+*.env.local
+
+# Back-end
+backend/target/
+backend/.idea/
+*.iml
+
+# Front-end
+frontend/node_modules/
+frontend/dist/
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

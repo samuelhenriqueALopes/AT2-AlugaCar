@@ -1,0 +1,70 @@
+@startuml classes-v1
+!pragma layout smetana
+title AlugaCar - Diagrama de Classes (v1 - modelo inicial a partir dos requisitos)
+skinparam classAttributeIconSize 0
+hide empty members
+
+abstract class Usuario {
+  - login : String
+  - senha : String
+  + autenticar() : boolean
+}
+
+class Cliente {
+  - rg : String
+  - cpf : String
+  - nome : String
+  - endereco : String
+  - profissao : String
+  + introduzirPedido() : Pedido
+  + modificarPedido(p : Pedido) : void
+  + consultarPedido(p : Pedido) : void
+  + cancelarPedido(p : Pedido) : void
+}
+
+class EntidadeEmpregadora {
+  - nome : String
+  - rendimento : double
+}
+
+abstract class Agente {
+  + modificarPedido(p : Pedido) : void
+  + avaliarPedido(p : Pedido) : void
+}
+class Empresa
+class Banco {
+  + concederCredito(p : Pedido) : ContratoCredito
+}
+
+class Automovel {
+  - matricula : String
+  - ano : int
+  - marca : String
+  - modelo : String
+  - placa : String
+}
+
+class Pedido {
+  - status : String
+}
+
+class Contrato {
+  - tipo : String
+}
+
+class ContratoCredito {
+  - valor : double
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Agente
+Agente <|-- Empresa
+Agente <|-- Banco
+Cliente "1" -- "0..3" EntidadeEmpregadora
+Cliente "1" -- "*" Pedido
+Pedido "*" -- "1" Automovel
+Pedido "1" -- "0..1" Contrato
+Contrato "1" -- "0..1" ContratoCredito
+Banco "1" -- "*" ContratoCredito
+Automovel "*" -- "1" Usuario : proprietário
+@enduml

@@ -1,0 +1,122 @@
+@startuml classes
+!pragma layout smetana
+title AlugaCar - Diagrama de Classes (v2 - alinhado ao código)
+skinparam classAttributeIconSize 0
+hide empty members
+
+package "model" {
+  abstract class Usuario {
+    - id : Long
+    - nome : String
+    - login : String
+    - senha : String
+    - email : String
+    + {abstract} getPapel() : Papel
+    + getRoles() : List<String>
+  }
+
+  class Cliente {
+    + {static} MAX_RENDIMENTOS : int = 3
+    - rg : String
+    - cpf : String
+    - endereco : String
+    - profissao : String
+    + adicionarRendimento(entidade : String, valor : BigDecimal) : void
+    + limparRendimentos() : void
+    + getRendaTotal() : BigDecimal
+  }
+
+  class Rendimento {
+    - id : Long
+    - entidadeEmpregadora : String
+    - valor : BigDecimal
+  }
+
+  class Agente {
+    - cnpj : String
+    - tipo : TipoAgente
+    + isBanco() : boolean
+  }
+
+  class Automovel {
+    - id : Long
+    - matricula : String
+    - ano : Integer
+    - marca : String
+    - modelo : String
+    - placa : String
+    - imagem : String
+    + registrarProprietario(u : Usuario) : void
+  }
+
+  class PedidoAluguel {
+    - id : Long
+    - dataInicio : LocalDate
+    - dataFim : LocalDate
+    - dataCriacao : LocalDateTime
+    - status : StatusPedido
+    - observacoes : String
+    - solicitaCredito : boolean
+    - parecer : String
+    - dataAvaliacao : LocalDateTime
+    + modificarPeloCliente(...) : void
+    + modificarPeloAgente(...) : void
+    + cancelar() : void
+    + avaliar(agente : Agente, positivo : boolean, parecer : String) : void
+    ~ marcarContratado() : void
+    + getQuantidadeDias() : long
+  }
+
+  class Contrato {
+    - id : Long
+    - tipoPropriedade : TipoPropriedade
+    - dataAssinatura : LocalDateTime
+    + {static} executar(p : PedidoAluguel, a : Agente, t : TipoPropriedade, c : ContratoCredito) : Contrato
+  }
+
+  class ContratoCredito {
+    - id : Long
+    - valor : BigDecimal
+    - taxaJurosMensal : BigDecimal
+    - numeroParcelas : Integer
+    + getValorParcela() : BigDecimal
+  }
+
+  enum Papel {
+    CLIENTE
+    AGENTE
+  }
+  enum TipoAgente {
+    EMPRESA
+    BANCO
+  }
+  enum StatusPedido {
+    PENDENTE
+    APROVADO
+    REPROVADO
+    CANCELADO
+    CONTRATADO
+  }
+  enum TipoPropriedade {
+    CLIENTE
+    EMPRESA
+    BANCO
+  }
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Agente
+Cliente "1" *-- "0..3" Rendimento : aufere >
+Cliente "1" -- "0..*" PedidoAluguel : introduz >
+PedidoAluguel "0..*" --> "1" Automovel : refere-se a >
+PedidoAluguel "0..*" --> "0..1" Agente : avaliado por >
+Contrato "0..1" --> "1" PedidoAluguel : formaliza >
+Contrato "0..*" --> "1" Agente : executado por >
+Contrato "1" *-- "0..1" ContratoCredito : associado a >
+ContratoCredito "0..*" --> "1" Agente : concedido por (banco) >
+Automovel "0..*" --> "0..1" Usuario : proprietário >
+Agente ..> TipoAgente
+PedidoAluguel ..> StatusPedido
+Contrato ..> TipoPropriedade
+Usuario ..> Papel
+@enduml

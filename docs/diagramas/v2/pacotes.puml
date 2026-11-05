@@ -1,0 +1,64 @@
+@startuml pacotes
+!pragma layout smetana
+title AlugaCar - Diagrama de Pacotes (Visão Lógica, v2)
+skinparam packageStyle folder
+
+package "Subsistema de Construção Dinâmica das Páginas Web\n(frontend - React + Vite)" as FE {
+  package pages {
+  }
+  package components {
+  }
+  package context {
+  }
+  package services {
+  }
+}
+
+package "Subsistema de Gestão de Pedidos e Contratos\n(backend - br.pucminas.alugacar - Spring Boot)" as BE {
+  package controller {
+  }
+  package dto {
+  }
+  package service {
+  }
+  package repository {
+  }
+  package model {
+  }
+  package security {
+  }
+  package exception {
+  }
+  package config {
+  }
+}
+
+database "Supabase\n(PostgreSQL)" as DB
+
+pages ..> components
+pages ..> context
+pages ..> services
+context ..> services
+services ..> controller : HTTP/JSON (REST)\nAuthorization: Bearer JWT
+
+controller ..> service
+controller ..> dto
+controller ..> security
+service ..> repository
+service ..> model
+service ..> dto
+service ..> exception
+dto ..> model
+repository ..> model
+model ..> exception
+security ..> model
+config ..> repository
+repository ..> DB : JPA / JDBC
+
+note right of BE
+  Arquitetura MVC:
+  Model = model (+ repository)
+  View = frontend React (consome a API)
+  Controller = controller (REST)
+end note
+@enduml

@@ -1,0 +1,53 @@
+@startuml casos-de-uso
+!pragma layout smetana
+caption AlugaCar - Diagrama de Casos de Uso (v2)
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Cliente" as Cliente
+actor "Agente" as Agente
+actor "Empresa" as Empresa
+actor "Banco" as Banco
+
+Agente <|-- Empresa
+Agente <|-- Banco
+
+rectangle "Sistema AlugaCar (acesso somente após cadastro e login)" {
+  usecase "UC01 Realizar cadastro" as UC01
+  usecase "UC02 Efetuar login" as UC02
+  usecase "UC03 Gerenciar próprio cadastro\n(consultar / alterar / excluir)" as UC03
+  usecase "UC04 Introduzir pedido" as UC04
+  usecase "UC05 Modificar pedido" as UC05
+  usecase "UC06 Consultar pedidos e status" as UC06
+  usecase "UC07 Cancelar pedido" as UC07
+  usecase "UC08 Avaliar pedido\n(parecer financeiro)" as UC08
+  usecase "UC09 Executar contrato" as UC09
+  usecase "UC10 Conceder contrato de crédito" as UC10
+  usecase "UC11 Gerenciar automóveis" as UC11
+  usecase "UC12 Consultar clientes" as UC12
+  usecase "UC13 Consultar contratos" as UC13
+}
+
+Cliente --> UC01
+Cliente --> UC02
+Cliente --> UC03
+Cliente --> UC04
+Cliente --> UC05
+Cliente --> UC06
+Cliente --> UC07
+Cliente --> UC13
+
+UC01 <-- Agente
+UC02 <-- Agente
+UC05 <-- Agente
+UC06 <-- Agente
+UC08 <-- Agente
+UC09 <-- Agente
+UC11 <-- Agente
+UC12 <-- Agente
+UC13 <-- Agente
+UC10 <-- Banco
+
+UC09 <.. UC10 : <<extend>>
+@enduml

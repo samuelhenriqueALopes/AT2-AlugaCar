@@ -1,0 +1,21 @@
+@startuml pacotes-v1
+!pragma layout smetana
+title AlugaCar - Diagrama de Pacotes (v1 - visão inicial)
+skinparam packageStyle folder
+
+package "Construção Dinâmica de Páginas Web" as Web {
+  package "view"
+}
+package "Gestão de Pedidos e Contratos" as Gestao {
+  package "controller"
+  package "model"
+  package "dao"
+}
+database "Banco de Dados" as DB
+
+view ..> controller
+controller ..> model
+controller ..> dao
+dao ..> model
+dao ..> DB
+@enduml
