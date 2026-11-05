@@ -46,6 +46,8 @@
 
 ## 🔗 Links Úteis
 
+- 🌐 [Site publicado (Vercel)](https://at2-alugacar.vercel.app)
+- ⚙️ [API publicada (Render)](https://at2-alugacar-api.onrender.com) — no plano gratuito, a primeira requisição pode levar até 1 minuto
 - 📄 [Histórias de Usuário](docs/historias-de-usuario.md)
 - 📐 [Modelos UML e histórico de versões](docs/diagramas/README.md)
 - ⚙️ [Variáveis de ambiente do back-end](backend/.env.example)
