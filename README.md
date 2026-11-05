@@ -384,7 +384,7 @@ Os testes de integração (`AlugacarApplicationTests`) rodam com Spring Boot + M
 
 | Nome | GitHub |
 |---|---|
-| *Seu nome* | [@seu-usuario](https://github.com/seu-usuario) |
+| Samuel Henrique Alvarenga e Lopes | [@samuelhenriqueALopes](https://github.com/samuelhenriqueALopes) |
 
 ---
 
@@ -399,4 +399,4 @@ Os testes de integração (`AlugacarApplicationTests`) rodam com Spring Boot + M
 
 ## 📄 Licença
 
-Este projeto é distribuído sob a licença **MIT**.
+Este projeto é distribuído sob a licença **MIT** — veja o arquivo [LICENSE](LICENSE).
