@@ -185,7 +185,25 @@ Todas as versões dos modelos estão em [`docs/diagramas`](docs/diagramas/README
 | `CORS_ORIGINS` | Origens do front-end (aceita padrões) | `http://localhost:*` |
 | `APP_SEED` | Cria dados de demonstração | `true` |
 
-> **Supabase:** em *Project Settings → Database → Connection string*, copie a string do **Session pooler** (porta `5432`, compatível com IPv4). Converta para o formato JDBC (`jdbc:postgresql://HOST:5432/postgres?sslmode=require`) e use o usuário `postgres.<project-ref>`. Evite o *Transaction pooler* (porta `6543`), porque ele não suporta prepared statements do JDBC. As tabelas são criadas automaticamente pelo Hibernate (`ddl-auto=update`).
+Outras variáveis opcionais: `DB_SCHEMA` (schema das tabelas, padrão `alugacar`) e `DB_POOL_MAX` (máximo de conexões, padrão `5`).
+
+### 🗄️ Configurando o Supabase
+
+1. Crie um projeto em [supabase.com](https://supabase.com). Guarde a senha do banco, que é definida na criação do projeto.
+2. *(Recomendado)* Abra **SQL Editor → New query**, cole o conteúdo de [`docs/database/supabase.sql`](docs/database/supabase.sql) e clique em **Run**. O script:
+   - cria o schema dedicado **`alugacar`**, com as 8 tabelas, chaves e índices;
+   - retira o acesso dos papéis `anon` e `authenticated` (usados pela API pública do Supabase) e ativa o RLS.
+
+   Assim os dados só são acessíveis pelo back-end. Se você pular este passo, o back-end cria o schema e as tabelas sozinho na primeira execução.
+3. Clique em **Connect** (topo do painel), escolha **Session pooler** e copie a string, que tem o formato `postgresql://postgres.<ref>:[SENHA]@<host>:5432/postgres`. Ela fica assim no back-end:
+   - `DB_URL` = `jdbc:postgresql://<host>:5432/postgres?sslmode=require`
+   - `DB_USERNAME` = `postgres.<ref>`
+   - `DB_PASSWORD` = a senha do banco
+4. Copie [`backend/.env.example`](backend/.env.example) para **`backend/.env`** e preencha esses valores. O arquivo é lido automaticamente pelo Spring Boot e **não é versionado**.
+
+> **Por que um schema próprio?** O Supabase expõe o schema `public` automaticamente na Data API (REST/GraphQL), e qualquer pessoa com a chave pública do projeto conseguiria ler ou alterar as tabelas. Com o schema `alugacar`, o acesso passa obrigatoriamente pela API do AlugaCar, com login JWT e as regras de negócio.
+>
+> **Pooler:** use o *Session pooler* (porta `5432`, compatível com IPv4). Evite o *Transaction pooler* (porta `6543`), porque ele não suporta os prepared statements do JDBC, e a conexão *Direct*, que exige IPv6. O pool do back-end é limitado a 5 conexões, compatível com o plano gratuito.
 
 #### Front-end ([`frontend/.env.example`](frontend/.env.example))
 
@@ -198,10 +216,7 @@ Todas as versões dos modelos estão em [`docs/diagramas`](docs/diagramas/README
 ```bash
 cd backend
 
-# Com Supabase (PowerShell)
-$env:DB_URL="jdbc:postgresql://<host>:5432/postgres?sslmode=require"
-$env:DB_USERNAME="postgres.<project-ref>"
-$env:DB_PASSWORD="<senha>"
+# Com Supabase (lê backend/.env)
 mvn spring-boot:run
 
 # Sem Supabase (banco H2 em memória)
@@ -274,6 +289,7 @@ AlugaCar/
 │       ├── context/                        # AuthContext (sessão / JWT)
 │       └── services/                       # api.js (cliente HTTP)
 ├── docs/
+│   ├── database/supabase.sql               # Schema, tabelas e segurança para o Supabase
 │   ├── historias-de-usuario.md
 │   └── diagramas/
 │       ├── v1/                             # Modelos iniciais (.puml, .png, .svg)
